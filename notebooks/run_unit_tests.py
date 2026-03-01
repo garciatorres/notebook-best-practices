@@ -26,7 +26,7 @@ repo_root = str(Path(notebook_path).parent.parent)
 # Normalize so we use the actual workspace layout (insert "Users" if missing).
 parts = repo_root.split("/")
 if len(parts) >= 3 and parts[1] == "Workspace" and parts[2] != "Users":
-    repo_root = "/Workspace/Users/" + "/".join(parts[2:])
+    repo_root = "/Workspace/Users/" + "/".join(parts[1:])
 os.chdir(repo_root)
 
 # Skip writing pyc files on a readonly filesystem.
