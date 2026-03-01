@@ -1,5 +1,7 @@
 # Databricks Asset Bundle - Notebook Best Practices (COVID EDA)
 # Based on: https://learn.microsoft.com/en-us/azure/databricks/notebooks/best-practices
+#
+# Cloud-agnostic: deploy with -t dev (AWS) or -t azure (Azure Databricks).
 
 bundle:
   name: notebook-best-practices
@@ -7,10 +9,26 @@ bundle:
 workspace:
   root_path: /Workspace/Users/${workspace.current_user.userName}/notebook-best-practices-bundle
 
+variables:
+  # Overridden per target (see targets below)
+  node_type_id:
+    default: "m5.large"
+  aws_attributes:
+    default:
+      ebs_volume_count: 1
+      ebs_volume_size: 100
+
 targets:
   dev:
     default: true
     mode: development
+    # AWS: uses variables above (m5.large + EBS)
+
+  azure:
+    mode: development
+    variables:
+      node_type_id: "Standard_DS3_v2"
+      aws_attributes: {}  # Azure ignores this; empty so no EBS block sent
 
 resources:
   jobs:
@@ -20,8 +38,9 @@ resources:
         - job_cluster_key: default
           new_cluster:
             spark_version: 14.3.x-scala2.12
-            node_type_id: Standard_DS3_v2
+            node_type_id: ${var.node_type_id}
             num_workers: 1
+            aws_attributes: ${var.aws_attributes}
       tasks:
         - task_key: run_notebook_tests
           job_cluster_key: default

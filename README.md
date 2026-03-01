@@ -19,6 +19,18 @@ Technologies: **Databricks**, **Python**, **pandas**, **PySpark**, **pytest**, *
 - **Databricks CLI** installed and configured (e.g. `databricks configure` or profile in `~/.databrickscfg`).
 - **Git** (for pushing to your GitHub account).
 
+### Cloud-agnostic targets
+
+The bundle is cloud-agnostic. Choose the target that matches your workspace:
+
+| Target   | Use for        | Node type / config      |
+|----------|----------------|--------------------------|
+| **dev**  | Databricks on **AWS** (default) | `m5.large` + EBS volume |
+| **azure**| **Azure** Databricks           | `Standard_DS3_v2`       |
+
+- **AWS**: `databricks bundle deploy` (default) or `databricks bundle deploy -t dev`
+- **Azure**: `databricks bundle deploy -t azure`
+
 ---
 
 ## Step-by-step: Run the project

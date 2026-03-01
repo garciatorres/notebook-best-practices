@@ -17,17 +17,12 @@ dbutils.library.restartPython()
 import pytest
 import os
 import sys
+from pathlib import Path
 
-# Run all tests from the project root (parent of notebooks/)
+# Repo root = directory that contains the "notebooks" folder (parent of this notebook's parent).
+# Works for any workspace path layout (with/without "Users", any bundle folder name).
 notebook_path = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get()
-# Workspace path like /Workspace/Users/.../notebook-best-practices-bundle/notebooks/run_unit_tests
-# or repo root when running locally
-parts = notebook_path.split('/')
-if 'notebooks' in parts:
-    idx = parts.index('notebooks')
-    repo_root = '/Workspace/' + '/'.join(parts[2:idx])
-else:
-    repo_root = os.getcwd()
+repo_root = str(Path(notebook_path).parent.parent)
 os.chdir(repo_root)
 
 # Skip writing pyc files on a readonly filesystem.
