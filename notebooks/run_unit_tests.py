@@ -20,9 +20,13 @@ import sys
 from pathlib import Path
 
 # Repo root = directory that contains the "notebooks" folder (parent of this notebook's parent).
-# Works for any workspace path layout (with/without "Users", any bundle folder name).
 notebook_path = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get()
 repo_root = str(Path(notebook_path).parent.parent)
+# Some workspaces report paths as /Workspace/<username>/... but the real path is /Workspace/Users/<username>/...
+# Normalize so we use the actual workspace layout (insert "Users" if missing).
+parts = repo_root.split("/")
+if len(parts) >= 3 and parts[1] == "Workspace" and parts[2] != "Users":
+    repo_root = "/Workspace/Users/" + "/".join(parts[2:])
 os.chdir(repo_root)
 
 # Skip writing pyc files on a readonly filesystem.
