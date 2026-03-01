@@ -1,0 +1,1 @@
+# COVID analysis shared module

@@ -1,0 +1,38 @@
+# Databricks Asset Bundle - Notebook Best Practices (COVID EDA)
+# Based on: https://learn.microsoft.com/en-us/azure/databricks/notebooks/best-practices
+
+bundle:
+  name: notebook-best-practices
+
+workspace:
+  root_path: /Workspace/Users/${workspace.current_user.userName}/notebook-best-practices-bundle
+
+targets:
+  dev:
+    default: true
+    mode: development
+
+resources:
+  jobs:
+    covid_report:
+      name: "[${bundle.target}] COVID Report (tests + EDA)"
+      job_clusters:
+        - job_cluster_key: default
+          new_cluster:
+            spark_version: 14.3.x-scala2.12
+            node_type_id: Standard_DS3_v2
+            num_workers: 1
+      tasks:
+        - task_key: run_notebook_tests
+          job_cluster_key: default
+          notebook_task:
+            notebook_path: ./notebooks/run_unit_tests.py
+        - task_key: run_main_notebook
+          job_cluster_key: default
+          depends_on:
+            - task_key: run_notebook_tests
+          notebook_task:
+            notebook_path: ./notebooks/covid_eda_modular.py
+      permissions:
+        - level: CAN_VIEW
+          group_name: users

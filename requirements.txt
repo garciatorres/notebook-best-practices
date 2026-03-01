@@ -1,0 +1,9 @@
+# Dependencies for COVID EDA notebooks and unit tests
+# Cross-reference with your cluster's Databricks Runtime if needed
+pandas>=1.4.0
+numpy>=1.22.0
+matplotlib>=3.5.0
+pyspark>=3.2.0
+pyarrow>=7.0.0
+pytest>=7.0.0
+wget>=3.2
